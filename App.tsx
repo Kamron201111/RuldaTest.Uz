@@ -113,7 +113,7 @@ const AdminLayout = () => {
                 const active = isActive(item.path, item.exact);
                 return (
                   <button key={item.path} onClick={() => { navigate(item.path); setMobileOpen(false); }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all \${active ? 'bg-sky-500 text-white shadow-md' : 'text-slate-900 dark:text-slate-200 hover:bg-sky-50 dark:hover:bg-slate-800'}`}>
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all \${active ? 'bg-sky-500 text-white shadow-md' : 'text-gray-900 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}>
                     {getIcon(item.icon)}
                     <span className="flex-1 text-left">{item.label}</span>
                   </button>
