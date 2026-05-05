@@ -107,13 +107,13 @@ const AdminLayout = () => {
       <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-4">
         {NAV_GROUPS.map(group => (
           <div key={group.section}>
-            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-widest px-3 mb-1.5">{group.section}</p>
+            <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-3 mb-1.5">{group.section}</p>
             <div className="space-y-0.5">
               {group.items.map(item => {
                 const active = isActive(item.path, item.exact);
                 return (
                   <button key={item.path} onClick={() => { navigate(item.path); setMobileOpen(false); }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all \${active ? 'bg-sky-500 text-white shadow-md shadow-sky-100 dark:shadow-blue-900/40' : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'}`}>
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all \${active ? 'bg-sky-500 text-white shadow-md' : 'text-slate-900 dark:text-slate-200 hover:bg-sky-50 dark:hover:bg-slate-800'}`}>
                     {getIcon(item.icon)}
                     <span className="flex-1 text-left">{item.label}</span>
                   </button>
@@ -142,7 +142,7 @@ const AdminLayout = () => {
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 sticky top-0 h-screen">
+      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 bg-slate-50 dark:bg-slate-900 border-r-2 border-slate-200 dark:border-slate-800 sticky top-0 h-screen">
         <SidebarInner />
       </aside>
 
@@ -150,7 +150,7 @@ const AdminLayout = () => {
       {mobileOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
-          <aside className="relative w-64 bg-white dark:bg-slate-900 h-full shadow-2xl">
+          <aside className="relative w-64 bg-slate-50 dark:bg-slate-900 h-full shadow-2xl">
             <SidebarInner />
             <button onClick={() => setMobileOpen(false)} className="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
