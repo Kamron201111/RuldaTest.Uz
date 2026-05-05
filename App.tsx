@@ -34,7 +34,6 @@ const ProtectedRoute = ({ allowedRoles }: { allowedRoles: Role[] }) => {
   return <Outlet />;
 };
 
-
 const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -59,9 +58,9 @@ const AdminLayout = () => {
     { section: 'Asosiy', items: [
       { path: '/admin', icon: 'dashboard', label: 'Dashboard', exact: true },
     ]},
-    { section: "Kontent", items: [
-      { path: '/admin/questions/new', icon: 'plus', label: "Savol qo'shish" },
-      { path: '/admin/questions',     icon: 'list',  label: "Savollar ro'yxati" },
+    { section: 'Kontent', items: [
+      { path: '/admin/questions/new', icon: 'plus',   label: "Savol qo'shish" },
+      { path: '/admin/questions',     icon: 'list',   label: "Savollar ro'yxati" },
       { path: '/admin/biletlar',      icon: 'ticket', label: 'Biletlar' },
     ]},
     { section: "Ta'lim", items: [
@@ -76,46 +75,64 @@ const AdminLayout = () => {
   const isActive = (path: string, exact?: boolean) =>
     exact ? location.pathname === path : location.pathname.startsWith(path);
 
-  const getIcon = (icon: string) => {
-    const icons: Record<string, React.ReactNode> = {
-      dashboard: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>,
-      plus:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>,
-      list:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>,
-      ticket:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2v2z"/></svg>,
-      book:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>,
-      video: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>,
-      msg:   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>,
-      logout:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
-    };
-    return icons[icon] || null;
+  const Icon = ({ name }: { name: string }) => {
+    const s = { width: 16, height: 16 };
+    const p = { fill: "none", stroke: "currentColor", strokeWidth: 2 };
+    if (name === 'dashboard') return <svg {...s} viewBox="0 0 24 24" {...p}><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>;
+    if (name === 'plus')      return <svg {...s} viewBox="0 0 24 24" {...p}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>;
+    if (name === 'list')      return <svg {...s} viewBox="0 0 24 24" {...p}><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>;
+    if (name === 'ticket')    return <svg {...s} viewBox="0 0 24 24" {...p}><path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2v2z"/></svg>;
+    if (name === 'book')      return <svg {...s} viewBox="0 0 24 24" {...p}><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>;
+    if (name === 'video')     return <svg {...s} viewBox="0 0 24 24" {...p}><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>;
+    if (name === 'msg')       return <svg {...s} viewBox="0 0 24 24" {...p}><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>;
+    if (name === 'logout')    return <svg {...s} viewBox="0 0 24 24" {...p}><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>;
+    if (name === 'menu')      return <svg {...s} viewBox="0 0 24 24" {...p}><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>;
+    if (name === 'x')         return <svg {...s} viewBox="0 0 24 24" {...p}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+    if (name === 'refresh')   return <svg {...s} viewBox="0 0 24 24" {...p}><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>;
+    return null;
   };
 
+  // Sidebar — inline style bilan, hech qanday Tailwind dark muammo yo'q
   const SidebarInner = () => (
-    <div className="flex flex-col h-full">
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#e0f2fe' }}>
       {/* Logo */}
-      <div className="px-5 pt-6 pb-5 border-b border-slate-200 dark:border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-sky-500 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-lg shadow-sky-100 dark:shadow-blue-900/40">R</div>
+      <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid #bae6fd' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 36, height: 36, background: '#0284c7', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: 14 }}>R</div>
           <div>
-            <p className="font-black text-slate-800 dark:text-white text-sm leading-tight">RuldaTest</p>
-            <p className="text-[10px] text-slate-400 uppercase tracking-wider">Admin Panel</p>
+            <p style={{ fontWeight: 900, color: '#0c4a6e', fontSize: 14, lineHeight: 1.2 }}>RuldaTest</p>
+            <p style={{ fontSize: 10, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Admin Panel</p>
           </div>
         </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-4">
+      <nav style={{ flex: 1, padding: '16px 12px', overflowY: 'auto' }}>
         {NAV_GROUPS.map(group => (
-          <div key={group.section}>
-            <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-3 mb-1.5">{group.section}</p>
-            <div className="space-y-0.5">
+          <div key={group.section} style={{ marginBottom: 20 }}>
+            <p style={{ fontSize: 10, fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.1em', padding: '0 12px', marginBottom: 6 }}>
+              {group.section}
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               {group.items.map(item => {
                 const active = isActive(item.path, item.exact);
                 return (
-                  <button key={item.path} onClick={() => { navigate(item.path); setMobileOpen(false); }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all \${active ? 'bg-sky-500 text-white shadow-md' : 'text-gray-900 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}`}>
-                    {getIcon(item.icon)}
-                    <span className="flex-1 text-left">{item.label}</span>
+                  <button key={item.path}
+                    onClick={() => { navigate(item.path); setMobileOpen(false); }}
+                    style={{
+                      width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+                      padding: '10px 12px', borderRadius: 12, border: 'none', cursor: 'pointer',
+                      fontSize: 13, fontWeight: 600, textAlign: 'left', transition: 'all 0.15s',
+                      background: active ? '#0284c7' : 'transparent',
+                      color: active ? '#ffffff' : '#0c4a6e',
+                    }}
+                    onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.background = '#bae6fd'; }}
+                    onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                  >
+                    <span style={{ color: active ? '#e0f2fe' : '#0369a1', flexShrink: 0 }}>
+                      <Icon name={item.icon} />
+                    </span>
+                    <span style={{ flex: 1 }}>{item.label}</span>
                   </button>
                 );
               })}
@@ -125,10 +142,18 @@ const AdminLayout = () => {
       </nav>
 
       {/* Chiqish */}
-      <div className="px-3 pb-5 border-t border-slate-200 dark:border-slate-800 pt-3">
-        <button onClick={() => { if (window.confirm('Chiqishni tasdiqlaysizmi?')) logout(); }}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all">
-          {getIcon('logout')} Chiqish
+      <div style={{ padding: '12px', borderTop: '1px solid #bae6fd' }}>
+        <button
+          onClick={() => { if (window.confirm('Chiqishni tasdiqlaysizmi?')) logout(); }}
+          style={{
+            width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+            padding: '10px 12px', borderRadius: 12, border: 'none', cursor: 'pointer',
+            fontSize: 13, fontWeight: 600, color: '#dc2626', background: 'transparent', transition: 'all 0.15s',
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#fee2e2'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+        >
+          <Icon name="logout" /> Chiqish
         </button>
       </div>
     </div>
@@ -140,61 +165,61 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f0f9ff' }}>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 bg-slate-50 dark:bg-slate-900 border-r-2 border-slate-200 dark:border-slate-800 sticky top-0 h-screen">
+      <aside style={{ display: 'none', width: 240, flexShrink: 0, position: 'sticky', top: 0, height: '100vh' }}
+        className="lg:flex flex-col">
         <SidebarInner />
       </aside>
 
       {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 flex">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
-          <aside className="relative w-64 bg-slate-50 dark:bg-slate-900 h-full shadow-2xl">
+        <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)' }} onClick={() => setMobileOpen(false)} />
+          <aside style={{ position: 'relative', width: 256, height: '100%', boxShadow: '4px 0 24px rgba(0,0,0,0.15)' }}>
             <SidebarInner />
-            <button onClick={() => setMobileOpen(false)} className="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <button onClick={() => setMobileOpen(false)}
+              style={{ position: 'absolute', top: 16, right: 16, padding: 6, borderRadius: 8, border: 'none', cursor: 'pointer', background: '#bae6fd', color: '#0369a1' }}>
+              <Icon name="x" />
             </button>
           </aside>
         </div>
       )}
 
       {/* Main */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm">
-          <button onClick={() => setMobileOpen(true)} className="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        {/* Header */}
+        <header style={{ position: 'sticky', top: 0, zIndex: 30, display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#ffffff', borderBottom: '1px solid #bae6fd', boxShadow: '0 1px 4px rgba(14,165,233,0.08)' }}>
+          <button onClick={() => setMobileOpen(true)}
+            className="lg:hidden"
+            style={{ padding: 8, borderRadius: 10, border: 'none', cursor: 'pointer', background: '#e0f2fe', color: '#0369a1' }}>
+            <Icon name="menu" />
           </button>
-          <div className="flex items-center gap-2 text-sm flex-1">
-            <span className="text-slate-400 dark:text-slate-500 hidden sm:inline">Admin</span>
-            <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">/</span>
-            <span className="font-bold text-slate-800 dark:text-white">{pageName()}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, flex: 1 }}>
+            <span style={{ color: '#94a3b8' }}>Admin</span>
+            <span style={{ color: '#cbd5e1' }}>/</span>
+            <span style={{ fontWeight: 700, color: '#0c4a6e' }}>{pageName()}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {pendingCount > 0 && (
-              <button
-                onClick={() => navigate('/admin')}
-                className="flex items-center gap-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 text-amber-700 dark:text-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-all"
-              >
-                <span className="w-5 h-5 bg-amber-500 text-white rounded-full flex items-center justify-center text-[10px] font-black">{pendingCount}</span>
+              <button onClick={() => navigate('/admin')}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#fffbeb', border: '1px solid #fcd34d', color: '#92400e', padding: '6px 12px', borderRadius: 10, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+                <span style={{ width: 20, height: 20, background: '#f59e0b', color: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 900 }}>{pendingCount}</span>
                 yangi so'rov
               </button>
             )}
-            <button
-              onClick={() => window.location.reload()}
-              className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
-              title="Yangilash"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+            <button onClick={() => window.location.reload()}
+              style={{ padding: 8, borderRadius: 10, border: 'none', cursor: 'pointer', background: '#e0f2fe', color: '#0369a1' }}
+              title="Yangilash">
+              <Icon name="refresh" />
             </button>
           </div>
         </header>
-        <main className="flex-1"><Outlet /></main>
+        <main style={{ flex: 1 }}><Outlet /></main>
       </div>
     </div>
   );
 };
-
 
 const UserLayout = () => (
   <>
